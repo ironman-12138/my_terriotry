@@ -25,7 +25,7 @@ public class ApplicationInit implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        // 项目启动完成，初始化二维码解析表
+        // 项目启动完成，初始化数据库表
         checkTableExist();
     }
 

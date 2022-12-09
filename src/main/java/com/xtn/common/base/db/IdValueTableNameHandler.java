@@ -9,7 +9,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * @author 86138
+ * 数据库分表，表名配置
+ * @author xCoder
  */
 public class IdValueTableNameHandler implements TableNameHandler {
 
@@ -34,10 +35,10 @@ public class IdValueTableNameHandler implements TableNameHandler {
     }
 
     /**
-     * @param tableName
-     * @param year
-     * @param idValue
-     * @return
+     * @param tableName 表名前缀
+     * @param year 年份
+     * @param idValue id值
+     * @return id存储对应的表名
      */
     public static String getTableName(String tableName, String year, String idValue) {
 

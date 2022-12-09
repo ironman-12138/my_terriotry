@@ -34,7 +34,7 @@ public class AllLogAspect {
 
     @Around(value = "execution(* com.xtn..controller..*.*(..))")
     public Object goodsLog(ProceedingJoinPoint proceeding) throws Throwable {
-        Long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         // 创建流水号
         TLocalHelper.createSeq();
         Thread.currentThread().setName(TLocalHelper.getSeq());
@@ -99,9 +99,12 @@ public class AllLogAspect {
 
         String methodname = "";
         // 获取Log注解中的操作内容
-        ApiOperation apilog = method.getAnnotation(ApiOperation.class);
-        if(apilog != null && apilog.value() != null && apilog.value().length() > 0) {
-            methodname = apilog.value();
+        ApiOperation apiLog = method.getAnnotation(ApiOperation.class);
+        if(apiLog != null) {
+            apiLog.value();
+            if (apiLog.value().length() > 0) {
+                methodname = apiLog.value();
+            }
         }
         log.info("新增日志---->接口名称：{}，状态值：{}，状态信息：{}，调用者：{}，请求参数：{}，流水号：{}，耗时：{}ms", methodname, status, errorMsg, username, requestParam, localSeq, time);
 
