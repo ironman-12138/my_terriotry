@@ -1,5 +1,7 @@
 package com.xtn.common.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,16 +32,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static java.util.Collections.sort;
 
-/**
- * @author omen
- */
 @Slf4j
 @Component
 public class HttpUtil {
@@ -46,7 +44,6 @@ public class HttpUtil {
     /**
      * restTemplate配置,可以访问https
      */
-
     private static final RestTemplate REST_TEMPLATE = new RestTemplate(generateHttpsRequestFactory());
 
     private static HttpComponentsClientHttpRequestFactory generateHttpsRequestFactory() {
@@ -95,6 +92,31 @@ public class HttpUtil {
     }
 
     /**
+     * 发送post请求，参数拼接在url后
+     *
+     * @param url
+     * @param params
+     * @return
+     */
+    public static String postSplicing(String url, Map<String, Object> params) {
+        return postHttpClientSplicing(url, params);
+    }
+
+    private static String postHttpClientSplicing(String url, Map<String, Object> params) {
+        try {
+            if (!CollectionUtils.isEmpty(params)) {
+                url += paramsToString(params);
+            }
+            log.info("流水号:{},调用外部接口,url:{},参数:{},header:{}", TLocalHelper.getSeq(), url, new ObjectMapper().writeValueAsString(params), null);
+        } catch (JsonProcessingException e) {
+            log.info("参数列表转换字符串错误：{}", e.getMessage());
+        }
+        ResponseEntity<String> result = REST_TEMPLATE.postForEntity(url, null, String.class);
+        log.info("流水号:{},返回结果:{}", TLocalHelper.getSeq(), result.getBody());
+        return result.getBody();
+    }
+
+    /**
      * 发送普通get请求
      *
      * @param url
@@ -102,7 +124,7 @@ public class HttpUtil {
      * @return
      */
     public static String get(String url, Map<String, Object> params) {
-        return getHttplient(url, params, null);
+        return getHttpClient(url, params, null);
     }
 
     /**
@@ -113,7 +135,7 @@ public class HttpUtil {
      * @return
      */
     public static String postJson(String url, Map<String, Object> params) {
-        Map<String,String> header = new HashMap<>(16);
+        HashMap<String, String> header = new HashMap<>(16);
         header.put("Content-Type", "application/json");
         return postHttpClientJsonHeader(url, params, header);
     }
@@ -135,13 +157,17 @@ public class HttpUtil {
             }
         }
         HttpEntity<Map<String, Object>> entry = new HttpEntity<>(params, headers);
-        log.info("流水号:{},调用外部接口,url:{},参数:{},header:{}", TLocalHelper.getSeq(), url, JsonUtil.toJsonString(params), header);
+        try {
+            log.info("流水号:{},调用外部接口,url:{},参数:{},header:{}", TLocalHelper.getSeq(), url, new ObjectMapper().writeValueAsString(params), header);
+        } catch (JsonProcessingException e) {
+            log.info("参数列表转换字符串错误：{}", e.getMessage());
+        }
         ResponseEntity<String> result = REST_TEMPLATE.postForEntity(url, entry, String.class);
         log.info("流水号:{},返回结果:{}", TLocalHelper.getSeq(), result.getBody());
         return result.getBody();
     }
 
-    public static String postHttplientStringHeader(String url, String info, Map<String, String> header) {
+    public static String postHttpClientStringHeader(String url, String info, Map<String, String> header) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8));
         if (!CollectionUtils.isEmpty(header)) {
@@ -157,11 +183,11 @@ public class HttpUtil {
         return result.getBody();
     }
 
-    public static String postHttplientMultiValueHeader(String url, Map<String, String> params) {
-        return postHttplientMultiValueHeader(null, url, params, null);
+    public static String postHttpClientMultiValueHeader(String url, Map<String, String> params) {
+        return postHttpClientMultiValueHeader(null, url, params, null);
     }
 
-    public static String postHttplientMultiValueHeader(String urlName, String url, Map<String, String> params, Map<String, String> header) {
+    public static String postHttpClientMultiValueHeader(String urlName, String url, Map<String, String> params, Map<String, String> header) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         if (!CollectionUtils.isEmpty(header)) {
@@ -171,26 +197,9 @@ public class HttpUtil {
             }
         }
         HttpEntity<MultiValueMap<String, String>> entry = new HttpEntity<MultiValueMap<String, String>>(popHeaders(params), headers);
-        log.info("流水号:{},调用外部接口,接口名称:{},url:{},参数:{},header:{}", TLocalHelper.getSeq(), urlName, url, JsonUtil.toJsonString(params), header);
+        log.info("流水号:{},调用外部接口,接口名称:{},url:{},参数:{},header:{}", TLocalHelper.getSeq(), urlName, url, getJson(params), header);
         ResponseEntity<String> result = REST_TEMPLATE.postForEntity(url, entry, String.class);
         log.info("流水号:{},返回结果:{}", TLocalHelper.getSeq(), result.getBody());
-        return result.getBody();
-    }
-
-
-    public static String postHttplientMultiValueHeaderEdu(String urlName, String url, Map<String, String> params, Map<String, String> header) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        if (!CollectionUtils.isEmpty(header)) {
-            // 填充header
-            for (Map.Entry<String, String> entry : header.entrySet()) {
-                headers.add(entry.getKey(), entry.getValue());
-            }
-        }
-        HttpEntity<MultiValueMap<String, String>> entry = new HttpEntity<MultiValueMap<String, String>>(popHeaders(params), headers);
-        log.info("学历流水号:{},调用外部接口,接口名称:{},url:{},参数:{},header:{}", TLocalHelper.getSeq(), urlName, url, JsonUtil.toJsonString(params), header);
-        ResponseEntity<String> result = REST_TEMPLATE.postForEntity(url, entry, String.class);
-        log.info("学历流水号:{},返回结果:{}", TLocalHelper.getSeq(), result.getBody());
         return result.getBody();
     }
 
@@ -213,7 +222,7 @@ public class HttpUtil {
      * @param header
      * @return
      */
-    public static String getHttplient(String url, Map<String, Object> params, Map<String, String> header) {
+    public static String getHttpClient(String url, Map<String, Object> params, Map<String, String> header) {
         HttpHeaders headers = new HttpHeaders();
         if (!CollectionUtils.isEmpty(header)) {
             // 填充header
@@ -221,8 +230,10 @@ public class HttpUtil {
                 headers.add(entry.getKey(), entry.getValue());
             }
         }
-        //HttpEntity<Map<String, Object>> entry = new HttpEntity<>(params, headers);
-        log.info("流水号:{},调用外部接口,url:{},参数:{},header:{}", TLocalHelper.getSeq(), url, JsonUtil.toJsonString(params), header);
+        if (!CollectionUtils.isEmpty(params)) {
+            url += paramsToString(params);
+        }
+        log.info("流水号:{},调用外部接口,url:{},参数:{},header:{}", TLocalHelper.getSeq(), url, getJson(params), header);
         ResponseEntity<String> result = REST_TEMPLATE.getForEntity(url, String.class, params);
         log.info("流水号:{},返回结果:{}", TLocalHelper.getSeq(), result.getBody());
         return result.getBody();
@@ -245,24 +256,14 @@ public class HttpUtil {
         return res;
     }
 
-    // 拼接Post请求参数
-    public static String paramsToString(Map<String, String> params) {
-        if (params != null && params.size() > 0) {
-            String paramsEncoding = "UTF-8";
-            StringBuilder encodedParams = new StringBuilder();
-            try {
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    encodedParams.append(URLEncoder.encode(entry.getKey(), paramsEncoding));
-                    encodedParams.append('=');
-                    encodedParams.append(URLEncoder.encode(entry.getValue(), paramsEncoding));
-                    encodedParams.append('&');
-                }
-                return encodedParams.toString();
-            } catch (UnsupportedEncodingException uee) {
-                throw new RuntimeException("Encoding not supported: " + paramsEncoding, uee);
-            }
+    // 拼接请求参数
+    public static String paramsToString(Map<String, Object> params) {
+        StringBuilder urlParams = new StringBuilder("?");
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            urlParams.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
-        return "";
+        String urlParamsStr = urlParams.toString();
+        return urlParamsStr.substring(0, urlParamsStr.length()-1);
     }
 
     /**
@@ -273,7 +274,7 @@ public class HttpUtil {
      * @return 待签名字符串
      */
     public static String getSignContent(Map<String, Object> sortedParams) {
-        List<String> keys = new ArrayList();
+        List<String> keys = new ArrayList<String>();
         for (Map.Entry<String, Object> entry : sortedParams.entrySet()) {
             keys.add(entry.getKey());
         }
@@ -290,5 +291,19 @@ public class HttpUtil {
         return content.toString();
     }
 
+    private static String getJson(Object o) {
+        try {
+            return new ObjectMapper().writeValueAsString(o);
+        } catch (Exception e) {
+            return "JSON异常";
+        }
+    }
+
+    public static void main(String[] args) {
+        Map<String, Object> requestParam = new HashMap<>();
+        requestParam.put("appid", "appId");
+        requestParam.put("secret", "secret");
+        System.out.println(paramsToString(requestParam));
+    }
 
 }
