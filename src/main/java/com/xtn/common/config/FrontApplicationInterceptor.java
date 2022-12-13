@@ -1,12 +1,12 @@
 package com.xtn.common.config;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xtn.common.annotation.NoLoginNeed;
 import com.xtn.common.base.ResultCode;
 import com.xtn.common.exception.BusinessException;
 import com.xtn.common.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -39,7 +39,7 @@ public class FrontApplicationInterceptor extends HandlerInterceptorAdapter {
         String token = request.getHeader(jwtUtils.getHeader());
 
         //凭证为空
-        if(StringUtils.isBlank(token)){
+        if(!StringUtils.hasText(token)){
             throw new BusinessException(ResultCode.LOGIN_ERROR, jwtUtils.getHeader() + "不能为空");
         }
 
