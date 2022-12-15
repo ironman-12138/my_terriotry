@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
@@ -20,6 +21,8 @@ import java.util.HashMap;
  */
 @Configuration
 public class MainDb {
+
+    static final String MAPPER_LOCATION = "classpath:mapper/**/*.xml";
 
     @Bean(name = "mainTransactionManager")
     public DataSourceTransactionManager masterTransactionManager(@Qualifier(Constants.DYNAMIC_DATA_SOURCE) DataSource dataSource) {
@@ -33,6 +36,9 @@ public class MainDb {
         factoryBean.setDataSource(dataSource);
         //加载插件
         factoryBean.setPlugins(mybatisPlusInterceptor());
+
+        //加载mybatis.xml映射文件
+        factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION));
         return factoryBean.getObject();
     }
 
@@ -48,6 +54,7 @@ public class MainDb {
 
         dynamicTableNameInnerInterceptor.setTableNameHandlerMap(map);
         interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor);
+
         return interceptor;
     }
 }

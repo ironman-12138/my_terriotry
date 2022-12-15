@@ -14,7 +14,7 @@ public class DynamicContextHolder {
     private static final ThreadLocal<Deque<String>> CONTEXT_HOLDER = new ThreadLocal() {
         @Override
         protected Object initialValue() {
-            return new ArrayDeque();
+            return new ArrayDeque<>();
         }
     };
 
