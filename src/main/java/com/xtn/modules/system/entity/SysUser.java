@@ -78,9 +78,9 @@ public class SysUser implements Serializable {
 	private String salt;
 
     /**
-     * 0:超级管理员，1：系统用户
+     * 0：超级管理员，1：后台用户，2：微信小程序用户
      */
-	@ApiModelProperty("0:超级管理员，1：系统用户")
+	@ApiModelProperty("0：超级管理员，1：后台用户，2：微信小程序用户")
 	private Integer type;
 
     /**
@@ -88,4 +88,10 @@ public class SysUser implements Serializable {
      */
 	@ApiModelProperty("密码")
 	private String password;
+
+    /**
+     * 微信小程序用户唯一标识
+     */
+	@ApiModelProperty("微信小程序用户唯一标识")
+	private String openId;
 }
