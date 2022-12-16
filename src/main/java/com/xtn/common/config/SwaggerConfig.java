@@ -1,5 +1,5 @@
 
-package com.xtn.common.base;
+package com.xtn.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +21,13 @@ import java.util.List;
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
-    public Docket client() {
-        return getDocket("用户端接口", "com.xtn.modules.blog.controller");
+    public Docket system() {
+        return getDocket("系统模块", "com.xtn.modules.system.controller");
+    }
+
+    @Bean
+    public Docket blog() {
+        return getDocket("博客模块", "com.xtn.modules.blog.controller");
     }
 
     private Docket getDocket(String groupName, String classPackage) {

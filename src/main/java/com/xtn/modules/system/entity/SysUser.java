@@ -1,5 +1,6 @@
 package com.xtn.modules.system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -74,6 +75,7 @@ public class SysUser implements Serializable {
     /**
      * 盐
      */
+	@JsonIgnore
 	@ApiModelProperty("盐")
 	private String salt;
 
@@ -86,6 +88,7 @@ public class SysUser implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
 	@ApiModelProperty("密码")
 	private String password;
 
