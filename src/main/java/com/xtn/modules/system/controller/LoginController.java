@@ -36,7 +36,7 @@ public class LoginController {
     @NoLoginNeed
     @PostMapping(value = "login")
     @ApiOperation("用户登录")
-    public Result<Map<String, Object>> login(@Valid @RequestBody UserLoginVo userLoginVo){
+    public Result<Map<String, Object>> login(@Valid @RequestBody UserLoginVo userLoginVo) {
         return Result.ok(sysUserService.login(userLoginVo));
     }
 
@@ -45,10 +45,9 @@ public class LoginController {
      * @param sysUser 当前登录用户
      * @return 当前登录用户详情
      */
-    @NoLoginNeed
     @PostMapping(value = "userDetail")
     @ApiOperation("当前登录用户详情")
-    public Result<SysUser> userDetail(@LoginUser SysUser sysUser){
+    public Result<SysUser> userDetail(@LoginUser SysUser sysUser) {
         return Result.ok(sysUser);
     }
 

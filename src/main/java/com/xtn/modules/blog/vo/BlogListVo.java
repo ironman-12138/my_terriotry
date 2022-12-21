@@ -35,4 +35,16 @@ public class BlogListVo {
     @ApiModelProperty("创建人id")
     private Long createId;
 
+    /**
+     * 创建人名称
+     */
+    @ApiModelProperty("创建人名称")
+    private String createName;
+
+    /**
+     * 博客标签（逗号分隔）
+     */
+    @ApiModelProperty("博客标签（逗号分隔）")
+    private String labelName;
+
 }

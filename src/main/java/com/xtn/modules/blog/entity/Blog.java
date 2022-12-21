@@ -24,12 +24,6 @@ public class Blog implements Serializable {
 	private Long id;
 
     /**
-     * 用户ID
-     */
-	@ApiModelProperty("用户ID")
-	private Long userId;
-
-    /**
      * 标题
      */
 	@ApiModelProperty("标题")

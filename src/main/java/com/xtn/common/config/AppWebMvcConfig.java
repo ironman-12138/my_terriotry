@@ -1,15 +1,18 @@
 package com.xtn.common.config;
 
 import com.xtn.common.utils.JwtUtils;
+import com.xtn.common.utils.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * MVC拦截器
@@ -41,7 +44,7 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 
         // 用户端拦截器
         registry.addInterceptor(new FrontApplicationInterceptor(jwtUtils))
-                .addPathPatterns("/front/**");
+                .addPathPatterns("a/**");
     }
 
     /**
@@ -79,6 +82,12 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
 
         //返回Cors过滤器Bean
         return new CorsFilter(configSource);
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        LoginUserHandlerMethodArgumentResolver loginUserHandlerMethodArgumentResolver = SpringContextUtil.getBean(LoginUserHandlerMethodArgumentResolver.class);
+        argumentResolvers.add(loginUserHandlerMethodArgumentResolver);
     }
 
 }

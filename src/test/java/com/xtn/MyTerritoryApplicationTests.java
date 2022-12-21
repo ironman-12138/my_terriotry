@@ -16,10 +16,6 @@ class MyTerritoryApplicationTests {
 
     @Test
     void test1() {
-
-        List<Blog> blogList = blogMapper.selectAll();
-        System.out.println(blogList.size());
-
     }
 
 }

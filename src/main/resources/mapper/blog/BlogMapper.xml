@@ -3,7 +3,29 @@
 
 <mapper namespace="com.xtn.modules.blog.mapper.BlogMapper">
 
-    <select id="selectAll" resultType="com.xtn.modules.blog.entity.Blog">
-        select * from blog
+    <select id="getBlogList" resultType="com.xtn.modules.blog.vo.BlogListVo">
+        SELECT
+            b.id,
+            b.title,
+            b.create_time,
+            b.create_id,
+            su.username AS createName,
+            GROUP_CONCAT(bl.label_name) AS labelName
+        FROM
+            blog b
+            LEFT JOIN sys_user su ON b.create_id = su.id
+            LEFT JOIN blog_label bl ON FIND_IN_SET(bl.id,b.label_id)
+        WHERE
+            b.delete_at = 0
+            <if test="type != null and type == 1">
+                AND b.open = 1
+            </if>
+            <if test="type != null and type == 2">
+                AND b.create_id = #{id}
+            </if>
+        GROUP BY
+            b.id
+        ORDER BY
+            b.create_time DESC
     </select>
 </mapper>

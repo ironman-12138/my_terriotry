@@ -2,7 +2,9 @@ package com.xtn.modules.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xtn.modules.blog.entity.Blog;
+import com.xtn.modules.blog.vo.BlogListVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,5 +18,10 @@ import java.util.List;
 @Mapper
 public interface BlogMapper extends BaseMapper<Blog> {
 
-    List<Blog> selectAll();
+    /**
+     * 博客列表
+     * @param type 类型（1：公开，2：我的）
+     * @param id 登录用户id
+     */
+    List<BlogListVo> getBlogList(@Param("type") Integer type, @Param("id") Long id);
 }
