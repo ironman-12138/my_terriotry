@@ -3,10 +3,8 @@ package com.xtn.modules.blog.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.xtn.common.annotation.LoginUser;
-import com.xtn.common.annotation.NoLoginNeed;
 import com.xtn.common.base.Paging;
 import com.xtn.common.base.Result;
-import com.xtn.modules.blog.entity.Blog;
 import com.xtn.modules.blog.request.BlogSaveRequest;
 import com.xtn.modules.blog.service.BlogService;
 import com.xtn.modules.blog.vo.BlogListVo;
@@ -15,10 +13,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 微信小程序端-博客模块
@@ -40,9 +40,9 @@ public class BlogController {
      */
     @GetMapping("list")
     @ApiOperation("博客列表")
-    @ApiImplicitParam(name = "type", value = "类型（1：公开，2：我的）", required = true)
-    public Result<PageInfo<BlogListVo>> list(@RequestParam Integer type,
-                                             @RequestParam Paging paging,
+    @ApiImplicitParam(name = "type", required = true, value = "类型（1：公开，2：我的）", paramType = "query")
+    public Result<PageInfo<BlogListVo>> list(Integer type,
+                                             Paging paging,
                                              @LoginUser SysUser sysUser) {
         PageInfo<BlogListVo> pageInfo = blogService.getBlogList(type, paging, sysUser);
         return Result.ok(pageInfo);

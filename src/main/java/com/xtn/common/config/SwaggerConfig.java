@@ -1,6 +1,7 @@
 
 package com.xtn.common.config;
 
+import com.xtn.modules.system.entity.SysUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -42,7 +43,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .apis(RequestHandlerSelectors.basePackage(classPackage))
                 .paths(PathSelectors.any())
                 .build()
-                .securitySchemes(security());
+                .securitySchemes(security())
+                .ignoredParameterTypes(SysUser.class);
     }
 
     private ApiInfo apiInfo() {

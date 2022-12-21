@@ -45,10 +45,10 @@ public class AllLogAspect {
         //请求参数
         String requestParam = JsonUtil.toJsonString(getParameter(method, proceeding.getArgs()));
         if (request != null)
-            log.info("接口请求路径:{},请求参数:{},流水号:{}", request.getRequestURI(), requestParam, TLocalHelper.getSeq());
+            log.info("接口请求执行开始,路径:{},请求参数:{},流水号:{}", request.getRequestURI(), requestParam, TLocalHelper.getSeq());
         Object result = proceeding.proceed();
         if (request != null)
-            log.info("接口执行结束,耗时:{}ms,返回数据:{},流水号:{}", System.currentTimeMillis() - startTime, Objects.nonNull(result) ? result.toString() : "null", TLocalHelper.getSeq());
+            log.info("接口请求执行结束,耗时:{}ms,返回数据:{},流水号:{}", System.currentTimeMillis() - startTime, Objects.nonNull(result) ? result.toString() : "null", TLocalHelper.getSeq());
         return result;
     }
 

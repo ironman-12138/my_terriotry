@@ -34,6 +34,11 @@ spring:
 #  resources:
 #    add-mappings: false
 
+logging:
+  level:
+    com.xtn.modules.blog.mapper: debug
+    com.xtn.modules.system.mapper: debug
+
 client:
   # 用户端模块，是通过jwt认证的
   jwt:
