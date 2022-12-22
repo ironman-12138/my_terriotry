@@ -17,6 +17,7 @@
             LEFT JOIN blog_label bl ON FIND_IN_SET(bl.id,b.label_id)
         WHERE
             b.delete_at = 0
+            AND bl.delete_at = 0
             <if test="type != null and type == 1">
                 AND b.open = 1
             </if>

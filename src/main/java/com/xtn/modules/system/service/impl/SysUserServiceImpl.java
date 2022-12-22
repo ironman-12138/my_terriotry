@@ -38,7 +38,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setId(1L);
         user.setUsername("ADMIN");
         //生成token
-        String token = jwtUtils.generateToken(user.getId());
+        String token = jwtUtils.generateToken(user.getId(), user.getUsername());
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         map.put("expire", jwtUtils.getExpire());

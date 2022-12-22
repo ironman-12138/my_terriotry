@@ -31,11 +31,6 @@ public class LogAspect {
      */
     ThreadLocal<Long> start = new ThreadLocal<>();
 
-
-    private String getLogUserName() {
-
-        return "未登录";
-    }
     /**
      * 记录接口日志
      *
@@ -53,17 +48,16 @@ public class LogAspect {
         //请求参数
         String requestParam = JsonUtil.toJsonString(AllLogAspect.getParameter(method, proceeding.getArgs()));
         // 获取用户名
-        String username = getLogUserName();
         Object result = proceeding.proceed();
         long time = System.currentTimeMillis() - start.get();
         // 如果返回的结果是RestResponse, 并且code值不是00(success), 则记录为异常日志
         if (result instanceof Result) {
             Result res = (Result) result;
             // 记录日志
-            AllLogAspect.addLog(request, proceeding, res.getCode(), res.getMsg(), username, requestParam, TLocalHelper.getSeq(), time);
+            AllLogAspect.addLog(request, proceeding, res.getCode(), res.getMsg(), requestParam, TLocalHelper.getSeq(), time);
         } else {
             // 其他情况记录异常日志
-            AllLogAspect.addLog(request, proceeding, ResultCode.UN_KNOW_ERROR, ResultCode.UN_KNOW_ERROR_DESC, username, requestParam, TLocalHelper.getSeq(), time);
+            AllLogAspect.addLog(request, proceeding, ResultCode.UN_KNOW_ERROR, ResultCode.UN_KNOW_ERROR_DESC, requestParam, TLocalHelper.getSeq(), time);
         }
 
         return result;

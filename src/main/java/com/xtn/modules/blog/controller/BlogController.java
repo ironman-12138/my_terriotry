@@ -17,12 +17,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 微信小程序端-博客模块
+ * 博客管理
  * @author xCoder
  */
 @RestController
-@RequestMapping("/front/wx/blog")
-@Api(tags = "博客模块")
+@RequestMapping("/blog")
+@Api(tags = "博客管理")
 @AllArgsConstructor
 public class BlogController {
 

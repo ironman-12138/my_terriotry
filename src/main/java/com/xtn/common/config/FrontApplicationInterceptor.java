@@ -23,6 +23,7 @@ public class FrontApplicationInterceptor extends HandlerInterceptorAdapter {
     }
 
     public static final String USER_KEY = "userId";
+    public static final String USER_NAME = "username";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -49,7 +50,8 @@ public class FrontApplicationInterceptor extends HandlerInterceptorAdapter {
         }
 
         //设置userId到request里，后续根据userId，获取用户信息
-        request.setAttribute(USER_KEY, Long.parseLong(claims.getSubject()));
+        request.setAttribute(USER_KEY, Long.parseLong(claims.getId()));
+        request.setAttribute(USER_NAME, claims.getSubject());
 
         return true;
     }

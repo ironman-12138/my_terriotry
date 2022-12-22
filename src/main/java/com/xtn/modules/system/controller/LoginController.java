@@ -20,7 +20,7 @@ import java.util.Map;
  * @author xCoder
  */
 @RestController
-@RequestMapping("/front")
+@RequestMapping("/")
 @Api(tags="登录")
 @AllArgsConstructor
 public class LoginController {
