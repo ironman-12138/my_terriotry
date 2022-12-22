@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.xtn.common.base.Paging;
 import com.xtn.modules.blog.entity.Blog;
-import com.xtn.modules.blog.request.BlogSaveRequest;
+import com.xtn.modules.blog.request.BlogRequest;
 import com.xtn.modules.blog.vo.BlogListVo;
 import com.xtn.modules.system.entity.SysUser;
-
-import java.util.List;
 
 /**
  * 博客接口
@@ -31,5 +29,17 @@ public interface BlogService extends IService<Blog> {
      * @param request 请求参数
      * @param sysUser 登录用户
      */
-    void saveBlog(BlogSaveRequest request, SysUser sysUser);
+    void saveBlog(BlogRequest request, SysUser sysUser);
+
+    /**
+     * 编辑博客
+     * @param request 请求参数
+     */
+    void updateBlog(BlogRequest request);
+
+    /**
+     * 删除博客
+     * @param id 博客id
+     */
+    void delete(Long id);
 }

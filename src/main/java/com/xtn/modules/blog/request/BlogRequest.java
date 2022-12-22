@@ -3,15 +3,30 @@ package com.xtn.modules.blog.request;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * @author xCoder
  */
 @Data
-public class BlogSaveRequest {
+public class BlogRequest {
+
+    public interface Update {}
+
+    public interface Add {}
+
+    /**
+     * 博客id
+     */
+    @NotNull(message = "id不能为空", groups = Update.class)
+    @ApiModelProperty("博客id")
+    private Long id;
 
     /**
      * 标题
      */
+    @NotBlank(message = "标题不能为空", groups = {Add.class, Update.class})
     @ApiModelProperty("标题")
     private String title;
 

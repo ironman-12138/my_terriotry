@@ -25,7 +25,7 @@ public class FrontApplicationInterceptor extends HandlerInterceptorAdapter {
     public static final String USER_KEY = "userId";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         if (handler.getClass().isAssignableFrom(HandlerMethod.class)) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             NoLoginNeed noLoginNeed = handlerMethod.getMethodAnnotation(NoLoginNeed.class);

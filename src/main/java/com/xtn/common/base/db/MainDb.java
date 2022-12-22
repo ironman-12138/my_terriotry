@@ -1,5 +1,7 @@
 package com.xtn.common.base.db;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TableNameHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
@@ -39,6 +41,8 @@ public class MainDb {
 
         //加载mybatis.xml映射文件
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATION));
+        //设置id自增
+        factoryBean.setGlobalConfig(new GlobalConfig().setDbConfig(new GlobalConfig.DbConfig().setIdType(IdType.AUTO)));
         return factoryBean.getObject();
     }
 

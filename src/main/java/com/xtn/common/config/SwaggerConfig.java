@@ -23,13 +23,13 @@ public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket system() {
-        return getDocket("系统模块", "com.xtn.modules.system.controller");
+        return getDocket("系统模块", "com.xtn.modules.**.controller");
     }
 
-    @Bean
-    public Docket blog() {
-        return getDocket("博客模块", "com.xtn.modules.blog.controller");
-    }
+//    @Bean
+//    public Docket blog() {
+//        return getDocket("博客模块", "com.xtn.modules.blog.controller");
+//    }
 
     private Docket getDocket(String groupName, String classPackage) {
 
@@ -40,7 +40,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .groupName(groupName)
                 .select()
                 //这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage(classPackage))
+                //.apis(RequestHandlerSelectors.basePackage(classPackage))
                 .paths(PathSelectors.any())
                 .build()
                 .securitySchemes(security())
