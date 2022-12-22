@@ -6,8 +6,8 @@ package com.xtn.common.config;
  */
 public interface WxConfig {
 
-    String APP_ID = "wx23e5f07061068766";
-    String SECRET = "77b0ef1547715d1bd05abd8cf1aa43ab";
+    String APP_ID = "111";
+    String SECRET = "222";
     String WX_URL = "https://api.weixin.qq.com";
     //授权类型-获取授权凭证
     String GRANT_TYPE_CLIENT_CREDENTIAL = "client_credential";
