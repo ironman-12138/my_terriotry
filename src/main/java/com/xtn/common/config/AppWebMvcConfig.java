@@ -45,7 +45,7 @@ public class AppWebMvcConfig implements WebMvcConfigurer {
         // 用户端拦截器
         registry.addInterceptor(new FrontApplicationInterceptor(jwtUtils))
                 .addPathPatterns("/**")
-                .excludePathPatterns("/swagger-resources/**", "/v2/**", "/doc.html/**", "/webjars/**");
+                .excludePathPatterns("/swagger-resources/**", "/v2/**", "/doc.html/**", "/webjars/**", "/favicon.ico/**", "/error");
     }
 
     /**
