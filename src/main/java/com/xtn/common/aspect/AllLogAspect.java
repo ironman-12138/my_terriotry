@@ -3,7 +3,10 @@ package com.xtn.common.aspect;
 import com.xtn.common.config.FrontApplicationInterceptor;
 import com.xtn.common.utils.HttpUtil;
 import com.xtn.common.utils.JsonUtil;
+import com.xtn.common.utils.SpringContextUtil;
 import com.xtn.common.utils.TLocalHelper;
+import com.xtn.modules.system.service.SysLogService;
+import com.xtn.modules.system.service.SysUserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -112,6 +115,7 @@ public class AllLogAspect {
             }
         }
         log.info("新增日志---->接口名称：{}，状态值：{}，状态信息：{}，调用者：{}，请求参数：{}，流水号：{}，耗时：{}ms", methodName, status, errorMsg, username, requestParam, localSeq, time);
-
+        SysLogService sysLogService = SpringContextUtil.getBean(SysLogService.class);
+        sysLogService.saveLog(methodName, status, errorMsg, username, requestParam, localSeq, time);
     }
 }
