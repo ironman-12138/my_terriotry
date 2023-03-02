@@ -30,7 +30,7 @@ public class LoginController {
 
     /**
      * 用户登录
-     * @param userLoginVo 登录接口请求参数(用户手机号、验证码)
+     * @param userLoginVo 登录接口请求参数
      * @return token、过期时间、用户名
      */
     @NoLoginNeed

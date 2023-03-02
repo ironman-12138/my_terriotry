@@ -29,6 +29,12 @@ public class Blog implements Serializable {
 	@ApiModelProperty("标题")
 	private String title;
 
+	/**
+	 * 封面
+	 */
+	@ApiModelProperty("封面")
+	private String coverPic;
+
     /**
      * 内容
      */

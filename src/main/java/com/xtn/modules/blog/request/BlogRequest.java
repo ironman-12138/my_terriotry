@@ -31,6 +31,12 @@ public class BlogRequest {
     private String title;
 
     /**
+     * 封面
+     */
+    @ApiModelProperty("封面")
+    private String coverPic;
+
+    /**
      * 内容
      */
     @ApiModelProperty("内容")

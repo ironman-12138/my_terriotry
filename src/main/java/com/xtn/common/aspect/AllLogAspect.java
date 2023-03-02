@@ -88,34 +88,4 @@ public class AllLogAspect {
         }
     }
 
-    /**
-     * 新增日志
-     * @param request 请求
-     * @param joinPoint 入参
-     * @param status 状态值
-     * @param errorMsg 错误信息
-     * @param requestParam 请求参数
-     * @param localSeq 流水号
-     * @param time 耗时
-     */
-    public static void addLog(HttpServletRequest request, JoinPoint joinPoint, String status, String errorMsg, String requestParam, String localSeq, Long time) {
-        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        Method method = signature.getMethod();
-        //获取用户ID
-        Object attribute = request.getAttribute(FrontApplicationInterceptor.USER_NAME);
-        String username = Objects.nonNull(attribute) ? String.valueOf(attribute) : "未登录";
-
-        String methodName = "";
-        // 获取Log注解中的操作内容
-        ApiOperation apiLog = method.getAnnotation(ApiOperation.class);
-        if(apiLog != null) {
-            apiLog.value();
-            if (apiLog.value().length() > 0) {
-                methodName = apiLog.value();
-            }
-        }
-        log.info("新增日志---->接口名称：{}，状态值：{}，状态信息：{}，调用者：{}，请求参数：{}，流水号：{}，耗时：{}ms", methodName, status, errorMsg, username, requestParam, localSeq, time);
-        SysLogService sysLogService = SpringContextUtil.getBean(SysLogService.class);
-        sysLogService.saveLog(methodName, status, errorMsg, username, requestParam, localSeq, time);
-    }
 }

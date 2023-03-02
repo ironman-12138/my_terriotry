@@ -80,9 +80,9 @@ public class SysUser implements Serializable {
 	private String salt;
 
     /**
-     * 0：超级管理员，1：后台用户，2：微信小程序用户
+     * 0：超级管理员，1：普通用户
      */
-	@ApiModelProperty("0：超级管理员，1：后台用户，2：微信小程序用户")
+	@ApiModelProperty("0：超级管理员，1：普通用户")
 	private Integer type;
 
     /**
